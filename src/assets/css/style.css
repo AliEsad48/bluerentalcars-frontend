@@ -43,6 +43,17 @@ body {
 
 /************ MENUBAR ***********/
 
+.menubar .navbar-nav {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+@media (max-width: 450px) {
+  .menubar .navbar-nav {
+    flex-direction: column;
+  }
+}
+
 .menubar .navbar-nav a.active {
   border-bottom: 0.3rem solid var(--color2);
 }
@@ -72,4 +83,10 @@ body {
 .slider .carousel-control-prev {
   right: 50px;
   left: auto;
+}
+
+.slider form {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 0.2rem;
 }
