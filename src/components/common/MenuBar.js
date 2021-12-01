@@ -21,13 +21,13 @@ const MenuBar = () => {
             <Nav.Link href="#home">
               <RiHome5Line /> Home
             </Nav.Link>
-            <Nav.Link href="#link">
+            <Nav.Link href="#link1">
               <RiShape2Fill /> Services
             </Nav.Link>
-            <Nav.Link href="#link">
+            <Nav.Link href="#link2">
               <RiInformationLine /> About Us
             </Nav.Link>
-            <Nav.Link href="#link">
+            <Nav.Link href="#link3">
               <RiHeadphoneLine /> Contact
             </Nav.Link>
           </Nav>

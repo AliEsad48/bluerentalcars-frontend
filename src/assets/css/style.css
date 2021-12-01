@@ -5,6 +5,7 @@
   --color2: #4a80ee;
   --color3: #003297;
   --color4: #cecece;
+  --color1-transparent-15: rgba(0, 76, 229, 0.15);
 }
 
 body {
@@ -38,4 +39,37 @@ body {
 
 .topbar ul li {
   padding-left: 1rem;
+}
+
+/************ MENUBAR ***********/
+
+.menubar .navbar-nav a.active {
+  border-bottom: 0.3rem solid var(--color2);
+}
+
+.menubar .navbar-nav a:hover {
+  color: var(--color2) !important;
+}
+
+/************ SLIDER ***********/
+
+.slider {
+  background-color: var(--color1-transparent-15);
+}
+
+.slider .carousel-caption {
+  top: 0;
+  left: 0;
+  text-align: left;
+}
+
+.slider .carousel-control-next,
+.slider .carousel-control-prev {
+  top: auto;
+  height: 5%;
+}
+
+.slider .carousel-control-prev {
+  right: 50px;
+  left: auto;
 }
