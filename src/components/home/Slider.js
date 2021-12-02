@@ -8,10 +8,10 @@ const Slider = () => {
     <div className="slider">
       <Container>
         <Row>
-          <Col md={{ span: 7, order: "last" }}>
+          <Col lg={{ span: 7, order: "last" }}>
             <SliderCarousel />
           </Col>
-          <Col md={{ span: 5, order: "first" }}>
+          <Col lg={{ span: 5, order: "first" }}>
             <SliderForm />
           </Col>
         </Row>
