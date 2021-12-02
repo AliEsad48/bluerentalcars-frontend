@@ -14,7 +14,7 @@ export const vehicleList = [
   },
   {
     id: 2,
-    model: "Ford Fiesta Manuel",
+    model: "Ford Fiesta",
     doors: 4,
     seats: 5,
     luggage: 300,
@@ -27,7 +27,7 @@ export const vehicleList = [
   },
   {
     id: 3,
-    model: "Ford Fiesta Automatic",
+    model: "Ford Fiesta",
     doors: 4,
     seats: 5,
     luggage: 300,
@@ -259,4 +259,4 @@ export const vehicleList = [
     image: "bugatti-chiron.png",
     pricePerDay: 800,
   },
-]
+];

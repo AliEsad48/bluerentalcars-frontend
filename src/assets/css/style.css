@@ -1,4 +1,4 @@
-/************ GENERAL SETTINGS ***********/
+/************ GENRAL SETTINGS ************/
 
 :root {
   --color1: #004ce5;
@@ -19,12 +19,35 @@ body {
   background-color: var(--color1);
   border-color: var(--color1);
 }
+
 .btn-primary:hover {
   background-color: var(--color2);
   border-color: var(--color2);
 }
 
-/************ TOPBAR ***********/
+/************ SECTION TITLE ************/
+.section-title {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+}
+
+.section-title h2 {
+  font-weight: 900;
+  color: var(--color5);
+}
+
+.section-title span {
+  display: inline-block;
+  width: 5rem;
+  height: 0.5rem;
+  background-color: var(--color2);
+}
+
+/************ TOPBAR ************/
 .topbar {
   background-color: var(--color4);
   padding: 0.5rem;
@@ -33,8 +56,8 @@ body {
 .topbar ul {
   list-style-type: none;
   display: flex;
-  padding: 0;
   margin: 0;
+  padding: 0;
   justify-content: flex-end;
 }
 
@@ -42,13 +65,13 @@ body {
   padding-left: 1rem;
 }
 
-/************ MENUBAR ***********/
-
+/************ MENUBAR ************/
 .menubar .navbar-nav {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 }
+
 @media (max-width: 450px) {
   .menubar .navbar-nav {
     flex-direction: column;
@@ -62,31 +85,8 @@ body {
 .menubar .navbar-nav a:hover {
   color: var(--color2) !important;
 }
-/************ SECTION TITLE ***********/
 
-.section-title {
-  text-align: center;
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  position: relative;
-}
-
-.section-title h2 {
-  font-weight: 900;
-  color: var(--color5);
-}
-
-.section-title span {
-  display: inline-block;
-  width: 10rem;
-  height: 0.7rem;
-  background-color: var(--color1);
-}
-
-/************ SLIDER ***********/
-
+/************ SLIDER ************/
 .slider {
   background-color: var(--color1-transparent-15);
 }
@@ -100,7 +100,8 @@ body {
 .slider .carousel-control-next,
 .slider .carousel-control-prev {
   top: auto;
-  height: 5%;
+  bottom: 15px;
+  width: auto;
 }
 
 .slider .carousel-control-prev {
@@ -122,9 +123,58 @@ body {
   align-items: center;
 }
 
-/************ CUSTOMER SERVICE CARD ***********/
+/************ CUSTOMER SERVICE CARD ************/
 
 .customer-service-card .icon {
   color: var(--color2);
-  font-size: 3rem;
+  font-size: 4rem;
+}
+
+.customer-service-card .row {
+  align-items: center;
+  text-align: center;
+}
+
+/************ VEHICLES ***********/
+
+.vehicleList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.vehicleList li {
+  background-color: var(--color4);
+  padding: 1rem;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 1px;
+}
+
+.vehicleList li.active {
+  background-color: var(--color1-transparent-15);
+  position: relative;
+}
+
+.vehicleList li.active::after {
+  content: "";
+  position: absolute;
+  right: -10px;
+  width: 0;
+  height: 0;
+  border-left: 10px solid var(--color1-transparent-15);
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.vehicleList li:last-child,
+.vehicleList li:first-child {
+  padding: 0;
+}
+
+.vehicleList li button {
+  width: 100%;
 }
