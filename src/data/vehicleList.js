@@ -259,4 +259,4 @@ export const vehicleList = [
     image: "bugatti-chiron.png",
     pricePerDay: 800,
   },
-]
+];

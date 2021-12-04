@@ -1,9 +1,9 @@
-import React from "react"
-import { Form, InputGroup, FormControl, Button } from "react-bootstrap"
-import { FiCalendar, FiMapPin } from "react-icons/fi"
-import { vehicleList } from "../../data/vehicleList"
-import { FormikContext, useFormik } from "formik"
-import * as Yup from "yup"
+import React from "react";
+import { Form, InputGroup, FormControl, Button } from "react-bootstrap";
+import { FiCalendar, FiMapPin } from "react-icons/fi";
+import { vehicleList } from "../../data/vehicleList";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 const SliderForm = () => {
   const initialValues = {
@@ -14,7 +14,7 @@ const SliderForm = () => {
     pickUpTime: "",
     dropOffDate: "",
     dropOffTime: "",
-  }
+  };
 
   const validationSchema = Yup.object({
     car: Yup.string().required("Select a car please."),
@@ -24,17 +24,17 @@ const SliderForm = () => {
     pickUpTime: Yup.string().required("Select a pick up time please."),
     dropOffDate: Yup.string().required("Select a drop off date please."),
     dropOffTime: Yup.string().required("Select a drop off time please."),
-  })
+  });
 
   const onSubmit = (values) => {
-    console.log(values)
-  }
+    console.log(values);
+  };
 
   const formik = useFormik({
     initialValues,
     validationSchema,
     onSubmit,
-  })
+  });
 
   return (
     <Form noValidate onSubmit={formik.handleSubmit}>
@@ -53,7 +53,7 @@ const SliderForm = () => {
       </Form.Select>
 
       <InputGroup className="mb-3">
-        <InputGroup.Text id="basic-addon1" style={{ flex: 1 }}>
+        <InputGroup.Text id="basic-addon1" style={{ flex: 1 }} >
           <FiMapPin />
           &nbsp;Pick up
         </InputGroup.Text>
@@ -64,6 +64,7 @@ const SliderForm = () => {
           isInvalid={!!formik.errors.pickUpPlace}
         />
       </InputGroup>
+      
 
       <InputGroup className="mb-3">
         <InputGroup.Text id="basic-addon1" style={{ flex: 1 }}>
@@ -120,7 +121,7 @@ const SliderForm = () => {
         CONTINUE RESERVATION
       </Button>
     </Form>
-  )
-}
+  );
+};
 
-export default SliderForm
+export default SliderForm;

@@ -11,5 +11,6 @@ const sliderList = [
     title: "HYGIENIC VEHICLES WAIT YOU",
     description: "You can safely drive our hygienic vehicles",
   },
-]
-export default sliderList
+];
+
+export default sliderList;

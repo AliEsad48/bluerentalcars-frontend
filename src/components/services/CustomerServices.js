@@ -1,8 +1,8 @@
-import React from "react"
-import { Container, Row, Col } from "react-bootstrap"
-import SectionTitle from "../common/SectionTitle"
-import CustomerServiceCard from "./CustomerServiceCard"
-import services from "../../data/services"
+import React from "react";
+import { Container, Row, Col } from "react-bootstrap";
+import SectionTitle from "../common/SectionTitle";
+import CustomerServiceCard from "./CustomerServiceCard";
+import services from "../../data/services";
 
 const CustomerServices = () => {
   return (
@@ -21,7 +21,7 @@ const CustomerServices = () => {
         ))}
       </Row>
     </Container>
-  )
-}
+  );
+};
 
-export default CustomerServices
+export default CustomerServices;
