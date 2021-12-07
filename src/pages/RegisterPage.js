@@ -1,17 +1,17 @@
 import React from 'react'
-import LoginForm from '../components/auth/LoginForm'
+import RegisterForm from '../components/auth/RegisterForm'
 import PageHeader from '../components/common/PageHeader'
 import Spacer from '../components/common/Spacer'
 
-const LoginPage = () => {
+const RegisterPage = () => {
     return (
         <>
-            <PageHeader title="Login"/>
+            <PageHeader title="Register"/>
             <Spacer/>
-            <LoginForm/>
+            <RegisterForm/>
             <Spacer/>
         </>
     )
 }
 
-export default LoginPage
+export default RegisterPage

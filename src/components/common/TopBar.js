@@ -1,14 +1,13 @@
 import React from "react"
-import { Container, Row, Col, Button } from "react-bootstrap"
+import { Container, Row, Col } from "react-bootstrap"
 import {
   FiFacebook,
   FiInstagram,
   FiPhoneCall,
   FiTwitter,
-  FiUser,
   FiYoutube,
 } from "react-icons/fi"
-import { Link } from "react-router-dom"
+import UserMenu from "./UserMenu"
 
 const TopBar = () => {
   return (
@@ -34,9 +33,7 @@ const TopBar = () => {
                 <FiInstagram />
               </li>
               <li>
-                <Button as={Link} to="/login" size="sm">
-                  <FiUser /> Login
-                </Button>
+                <UserMenu />
               </li>
             </ul>
           </Col>
