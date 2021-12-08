@@ -1,29 +1,37 @@
-import React from "react"
-import { Link } from "react-router-dom"
-import { useStore } from "../../store"
-import { logout } from "../../store/user/userActions"
-import { Button, DropdownButton, Dropdown } from "react-bootstrap"
-import { FiUser } from "react-icons/fi"
-import "alertifyjs/build/css/alertify.css"
-import alertify from "alertifyjs"
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useStore } from "../../store";
+import { logout } from "../../store/user/userActions";
+import { Button, DropdownButton, Dropdown } from "react-bootstrap";
+import {
+  FiUser,
+} from "react-icons/fi";
+import alertify from "alertifyjs";
+
 
 const UserMenu = () => {
-  const { userState, dispatchUser } = useStore()
-  const { user, isUserLogin } = userState
+  const { userState, dispatchUser } = useStore();
+  const { user, isUserLogin } = userState;
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     alertify.confirm(
-      "Logout",
-      "Are you sure want to logout?",
-      () => {
-        dispatchUser(logout())
-        localStorage.removeItem("token")
-      },
-      () => {
-        console.log("canceled")
-      }
+        "Logout",
+        "Are you sure want to logout?",
+        () => {
+            dispatchUser(logout());
+            localStorage.removeItem("token");
+            navigate("/");
+
+        },
+        () => {
+            console.log("canceled");
+        }
     )
-  }
+
+
+    
+  };
 
   return (
     <>
@@ -48,7 +56,7 @@ const UserMenu = () => {
         </Button>
       )}
     </>
-  )
-}
+  );
+};
 
-export default UserMenu
+export default UserMenu;

@@ -1,13 +1,13 @@
-import React from "react"
-import { Container, Row, Col } from "react-bootstrap"
+import React from "react";
+import { Container, Row, Col } from "react-bootstrap";
 import {
   FiFacebook,
   FiInstagram,
   FiPhoneCall,
   FiTwitter,
   FiYoutube,
-} from "react-icons/fi"
-import UserMenu from "./UserMenu"
+} from "react-icons/fi";
+import UserMenu from "./UserMenu";
 
 const TopBar = () => {
   return (
@@ -33,14 +33,14 @@ const TopBar = () => {
                 <FiInstagram />
               </li>
               <li>
-                <UserMenu />
+                <UserMenu/>
               </li>
             </ul>
           </Col>
         </Row>
       </Container>
     </div>
-  )
-}
+  );
+};
 
-export default TopBar
+export default TopBar;

@@ -1,13 +1,16 @@
-import React, { useState } from "react"
-import * as Yup from "yup"
-import { toast } from "react-toastify"
-import { useFormik } from "formik"
-import { Form, Button, Spinner } from "react-bootstrap"
-import MaskInput from "react-maskinput/lib"
-import { updateUser } from "../../api/user-service"
+import React, { useState } from "react";
+import * as Yup from "yup";
+import { toast } from "react-toastify";
+import { useFormik } from "formik";
+import { Form,Button, Spinner } from "react-bootstrap";
+import MaskInput from "react-maskinput/lib";
+import { updateUser } from "../../api/user-service";
+
 const ProfileForm = ({ user }) => {
-  const [loading, setLoading] = useState(false)
-  const initialValues = user
+  const [loading, setLoading] = useState(false);
+
+  const initialValues = user;
+
   /*
     Object.keys(user).length > 0
       ? user
@@ -18,7 +21,6 @@ const ProfileForm = ({ user }) => {
           email: "",
           address: "",
           zipCode: "",
-          username: "",
         };
 */
   const validationSchema = Yup.object({
@@ -28,27 +30,33 @@ const ProfileForm = ({ user }) => {
     email: Yup.string().email().required("Please enter your email"),
     address: Yup.string().required("Please enter your address"),
     zipCode: Yup.string().required("Please enter your zip code"),
-  })
+  });
+
   const onSubmit = (values) => {
-    console.log(values)
-    setLoading(true)
-    updateUser(values)
-      .then((resp) => {
-        toast("Your profile updated successfully")
-        setLoading(false)
-      })
-      .catch((err) => {
-        toast("An error occured. Please try later.")
-        console.log(err.response.data.message)
-        setLoading(false)
-      })
-  }
+    console.log(values);
+
+    delete values["roles"];
+
+    setLoading(true);
+    updateUser(values).then(resp=>{
+      toast("Your profile updated successfully");
+      setLoading(false);
+    })
+    .catch(err=>{
+      toast("An error occured. Please try later.");
+      console.log(err.response.data.message);
+      setLoading(false);
+    })
+
+  };
+
   const formik = useFormik({
     enableReinitialize: true,
     initialValues,
     validationSchema,
     onSubmit,
-  })
+  });
+
   return (
     <Form noValidate onSubmit={formik.handleSubmit}>
       <Form.Group className="mb-3">
@@ -63,6 +71,7 @@ const ProfileForm = ({ user }) => {
           {formik.errors.firstName}
         </Form.Control.Feedback>
       </Form.Group>
+
       <Form.Group className="mb-3">
         <Form.Label>Last Name</Form.Label>
         <Form.Control
@@ -75,15 +84,16 @@ const ProfileForm = ({ user }) => {
           {formik.errors.lastName}
         </Form.Control.Feedback>
       </Form.Group>
+
       <Form.Group className="mb-3">
         <Form.Label>Phone Number</Form.Label>
         <Form.Control
           type="text"
           placeholder="Enter phone number"
           as={MaskInput}
-          alwaysShowMask
-          maskChar="_"
-          mask="(000) 000-0000"
+            alwaysShowMask
+            maskChar="_"
+            mask="(000) 000-0000"
           {...formik.getFieldProps("phoneNumber")}
           isInvalid={!!formik.errors.phoneNumber}
         />
@@ -91,6 +101,7 @@ const ProfileForm = ({ user }) => {
           {formik.errors.phoneNumber}
         </Form.Control.Feedback>
       </Form.Group>
+
       <Form.Group className="mb-3">
         <Form.Label>Email</Form.Label>
         <Form.Control
@@ -100,6 +111,7 @@ const ProfileForm = ({ user }) => {
           disabled
         />
       </Form.Group>
+
       <Form.Group className="mb-3">
         <Form.Label>Address</Form.Label>
         <Form.Control
@@ -112,6 +124,8 @@ const ProfileForm = ({ user }) => {
           {formik.errors.address}
         </Form.Control.Feedback>
       </Form.Group>
+
+
       <Form.Group className="mb-3">
         <Form.Label>Zip Code</Form.Label>
         <Form.Control
@@ -129,6 +143,7 @@ const ProfileForm = ({ user }) => {
         Save
       </Button>
     </Form>
-  )
-}
-export default ProfileForm
+  );
+};
+
+export default ProfileForm;
