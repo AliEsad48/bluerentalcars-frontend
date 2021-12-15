@@ -6,6 +6,7 @@ import { getVehicles } from "./api/vehicle-service";
 import Footer from "./components/common/Footer";
 import MenuBar from "./components/common/MenuBar";
 import TopBar from "./components/common/TopBar";
+import LoadingPage from "./pages/LoadingPage";
 import CustomRoutes from "./router/CustomRoutes";
 import { useStore } from "./store";
 import { loginSuccess } from "./store/user/userActions";
@@ -18,19 +19,24 @@ const App = () => {
   const loadData = async () => {
  
     try {
-      /**** LOAD USER ****/
-      const respUser = await getUser();
-      if (respUser.status !== 200) throw "An error occured whlie getting user";
-      dispatchUser(loginSuccess(respUser.data));
 
       /**** LOAD VEHICLES ****/
       const respVehicles = await getVehicles();
       if(respVehicles.status !==200) throw "An error occured whlie getting vehicles";
       dispatchVehicles(setVehiclesInStore(respVehicles.data));
+      
+
+
+      /**** LOAD USER ****/
+      const respUser = await getUser();
+      if (respUser.status !== 200) throw "An error occured whlie getting user";
+      dispatchUser(loginSuccess(respUser.data));
+
       setLoading(false);
 
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -38,7 +44,7 @@ const App = () => {
     loadData();
   }, []);
 
-  if(loading) return(<div>App loading...</div>)
+  if(loading) return(<LoadingPage/>)
   else
   return (
     <BrowserRouter>

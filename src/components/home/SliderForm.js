@@ -1,31 +1,37 @@
-import React from "react";
-import { Form, InputGroup, FormControl, Button } from "react-bootstrap";
+import React,{useState} from "react";
+import { Form, InputGroup, FormControl, Button, Spinner } from "react-bootstrap";
 import { FiCalendar, FiMapPin } from "react-icons/fi";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import CompleteReservationModal from "./CompleteReservationModal";
-import {useStore} from "../../store";
-import {setReservationState} from "../../store/reservation/reservationActions";
+import { useStore } from "../../store";
+import { setReservationState } from "../../store/reservation/reservationActions";
+import { toast } from "react-toastify";
+import { isVehicleAvaliable } from "../../api/reservation-service";
+import moment from "moment";
 
 const SliderForm = () => {
-  const { dispatchReservation, vehiclesState  } = useStore();
+  const [loading, setLoading] = useState(false);
+  const { dispatchReservation, vehiclesState, userState } = useStore();
   const { vehicles } = vehiclesState;
-  const [modalShow, setModalShow] = React.useState(false);
+  const { isUserLogin } = userState;
+  const [modalShow, setModalShow] = useState(false);
 
   const initialValues = {
     car: "",
-    pickUpPlace: "",
-    dropOffPlace: "",
+    pickUpLocation: "",
+    dropOfLocation: "",
     pickUpDate: "",
     pickUpTime: "",
     dropOffDate: "",
     dropOffTime: "",
+    totalPrice:0
   };
 
   const validationSchema = Yup.object({
     car: Yup.string().required("Select a car please."),
-    pickUpPlace: Yup.string().required("Enter a pick up place please."),
-    dropOffPlace: Yup.string().required("Enter a drop off place please."),
+    pickUpLocation: Yup.string().required("Enter a pick up place please."),
+    dropOfLocation: Yup.string().required("Enter a drop off place please."),
     pickUpDate: Yup.string().required("Select a pick up date please."),
     pickUpTime: Yup.string().required("Select a pick up time please."),
     dropOffDate: Yup.string().required("Select a drop off date please."),
@@ -33,13 +39,43 @@ const SliderForm = () => {
   });
 
   const onSubmit = (values) => {
-    console.log(values);
+    const { car, pickUpDate, pickUpTime, dropOffDate, dropOffTime } = values;
 
-    // Aracın belirtilen tarih aralığında müsait olup olmadığı kontrol edilmeli
+    if (!isUserLogin) {
+      toast("Please first login");
+      return;
+    }
 
-    dispatchReservation(setReservationState(values));
+    // Aracın belirtilen tarih aralığında müsait olup olmadığı kontrol ediliyor
+    const reservationDto = {
+      vehicleId: car,
+      pickUpDateTime: moment(`${pickUpDate} ${pickUpTime}`).format(
+        "MM/DD/YYYY HH:mm:ss"
+      ),
+      dropOffDateTime: moment(`${dropOffDate} ${dropOffTime}`).format(
+        "MM/DD/YYYY HH:mm:ss"
+      ),
+    };
 
-    setModalShow(true);
+    setLoading(true);
+    isVehicleAvaliable(reservationDto).then((resp) => {
+      setLoading(false);
+      const { isAvailable, totalPrice } = resp.data;
+
+      if(!isAvailable){
+        toast("The car is not avaliable in these days. Please select another one.");
+        return;
+      }
+
+      values.totalPrice = totalPrice;
+
+      dispatchReservation(setReservationState(values));
+
+      setModalShow(true);
+
+    });
+
+    
   };
 
   const formik = useFormik({
@@ -65,18 +101,17 @@ const SliderForm = () => {
       </Form.Select>
 
       <InputGroup className="mb-3">
-        <InputGroup.Text id="basic-addon1" style={{ flex: 1 }} >
+        <InputGroup.Text id="basic-addon1" style={{ flex: 1 }}>
           <FiMapPin />
           &nbsp;Pick up
         </InputGroup.Text>
         <FormControl
           placeholder="Type a place"
           style={{ flex: 3 }}
-          {...formik.getFieldProps("pickUpPlace")}
-          isInvalid={!!formik.errors.pickUpPlace}
+          {...formik.getFieldProps("pickUpLocation")}
+          isInvalid={!!formik.errors.pickUpLocation}
         />
       </InputGroup>
-      
 
       <InputGroup className="mb-3">
         <InputGroup.Text id="basic-addon1" style={{ flex: 1 }}>
@@ -86,8 +121,8 @@ const SliderForm = () => {
         <FormControl
           placeholder="Type a place"
           style={{ flex: 3 }}
-          {...formik.getFieldProps("dropOffPlace")}
-          isInvalid={!!formik.errors.dropOffPlace}
+          {...formik.getFieldProps("dropOfLocation")}
+          isInvalid={!!formik.errors.dropOfLocation}
         />
       </InputGroup>
 
@@ -98,6 +133,7 @@ const SliderForm = () => {
         </InputGroup.Text>
         <FormControl
           type="date"
+          min={moment().format("YYYY-MM-DD")}
           style={{ flex: 2 }}
           {...formik.getFieldProps("pickUpDate")}
           isInvalid={!!formik.errors.pickUpDate}
@@ -117,6 +153,7 @@ const SliderForm = () => {
         </InputGroup.Text>
         <FormControl
           type="date"
+          min={moment(formik.values.pickUpDate).format("YYYY-MM-DD")}
           style={{ flex: 2 }}
           {...formik.getFieldProps("dropOffDate")}
           isInvalid={!!formik.errors.dropOffDate}
@@ -129,15 +166,17 @@ const SliderForm = () => {
         />
       </InputGroup>
 
-      <Button size="lg" className="w-100" type="submit">
-        CONTINUE RESERVATION
+      <Button size="lg" className="w-100" type="submit" disabled={loading}>
+        {loading && <Spinner animation="border" size="sm"/> } CONTINUE RESERVATION
       </Button>
 
-      <CompleteReservationModal
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-      />
-
+      {modalShow && (
+        <CompleteReservationModal
+          show={modalShow}
+          onHide={() => setModalShow(false)}
+          onReset={()=> formik.handleReset()}
+        />
+      )}
     </Form>
   );
 };
