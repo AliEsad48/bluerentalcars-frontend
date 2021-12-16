@@ -1,3 +1,3 @@
 export const isAdmin = (roles) => {
-  return roles && roles.includes("Administrator")
+    return roles && roles.includes("Administrator");
 }
