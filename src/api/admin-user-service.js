@@ -9,10 +9,39 @@ const getUsers = () => {
   });
 };
 
+const getUserById = (userId) => {
+  return axios.get(`${API_URL}user/${userId}/auth`, {
+    headers: authHeader(),
+  });
+};
+
 const createUser = (user) => {
   return axios.post(`${API_URL}add`, user, {
     headers: authHeader(),
   });
 };
 
-export { getUsers, createUser };
+const updateUser = (userId, user) => {
+  return axios.put(`${API_URL}user/${userId}/auth`, user, {
+    headers: authHeader(),
+  });
+};
+
+const deleteUser = (userId) => {
+  return axios.delete(`${API_URL}user/${userId}/auth`, {
+    headers: authHeader(),
+  });
+};
+
+const downloadUsers = () => {
+  return axios.get(`${API_URL}excel/download/users`, {
+    headers: {
+      ...authHeader(),
+      "Content-Type":
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    },
+    responseType: "arraybuffer",
+  });
+};
+
+export { getUsers, createUser, downloadUsers, getUserById, updateUser, deleteUser };
