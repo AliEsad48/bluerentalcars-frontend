@@ -1,8 +1,7 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
-
 import {
   Form,
   Button,
@@ -14,18 +13,27 @@ import {
   Badge,
 } from "react-bootstrap";
 import {
-  createVehicle,
+  deleteVehicle,
+  updateVehicle,
   uploadVehicleImage,
 } from "../../api/admin-vehicle-service";
-import { Link, useNavigate } from "react-router-dom";
+import alertify from "alertifyjs";
+import { useNavigate, useParams, Link } from "react-router-dom";
+import { getVehicle } from "../../api/vehicle-service";
+import { isAdmin } from "../../utils/auth";
 
-const VehicleNew = () => {
+const VehicleEdit = () => {
   const [loading, setLoading] = useState(false);
-  const [imageSrc, setImageSrc] = useState("");
+  const [deleting, setDeleting] = useState(false);
+  const [isNewImage, setIsNewImage] = useState(false);
+  const { vehicleId } = useParams();
   const navigate = useNavigate();
+
+  const [imageSrc, setImageSrc] = useState("");
   const fileImageRef = useRef();
 
-  const initialValues = {
+  const [initialValues, setInitialValues] = useState({
+    id: "",
     model: "",
     doors: "",
     seats: "",
@@ -35,8 +43,7 @@ const VehicleNew = () => {
     fuelType: "",
     age: "",
     pricePerHour: "",
-    image: "",
-  };
+  });
 
   const validationSchema = Yup.object({
     model: Yup.string().required("Please enter the model"),
@@ -50,32 +57,35 @@ const VehicleNew = () => {
     fuelType: Yup.string().required("Please enter type of fuel"),
     age: Yup.number().required("Please enter type age"),
     pricePerHour: Yup.number().required("Please enter price per hour"),
-    image: Yup.mixed().required("Please select an image"),
   });
 
   const onSubmit = async (values) => {
     setLoading(true);
+    var imageId = "";
 
     try {
-      const formData = new FormData();
-      formData.append("file", values.image);
-      const respUpload = await uploadVehicleImage(formData);
-      if (respUpload.status !== 200)
-        throw "An error was occured while uploading image";
+      if (isNewImage) {
+        // Eğer araç fotoğrafı değiştirildiyse
+        const formData = new FormData();
+        formData.append("file", values.image);
+        const respUpload = await uploadVehicleImage(formData);
+        if (respUpload.status !== 200)
+          throw "An error was occured while uploading image";
 
-      const imageId = respUpload.data.imageId;
+        imageId = respUpload.data.imageId;
+      } else {
+        imageId = values.image[0];
+      }
 
       delete values["image"];
 
-      const respVehicle = await createVehicle(values, imageId);
-      if (respVehicle.status !== 201)
-        throw "An error was occured while creating vehicle";
-
+      const respVehicle = await updateVehicle(values, imageId, vehicleId);
+      if (respVehicle.status !== 200) throw respVehicle.responce.data.message;
       setLoading(false);
-      toast("Vehicle created successfully");
-      navigate("/admin/vehicles");
-    } catch (error) {
-      toast(error);
+      toast("The vehicle was updated successfully");
+    } catch (err) {
+      toast("An error occured while updating the vehicle");
+      console.log(err);
       setLoading(false);
     }
   };
@@ -99,19 +109,55 @@ const VehicleNew = () => {
     reader.onloadend = (e) => {
       setImageSrc(reader.result);
     };
+    setIsNewImage(true);
   };
 
   const handleSelectImage = () => {
     fileImageRef.current.click();
   };
 
+  const handleDelete = () => {
+    alertify.confirm(
+      "Delete",
+      "Are you sure want to delete?",
+      () => {
+        setDeleting(true);
+        deleteVehicle(vehicleId)
+          .then((resp) => {
+            toast("Vehicle was deleted successfully");
+            setDeleting(false);
+            navigate("/admin/vehicles");
+          })
+          .catch((err) => {
+            toast("An error occured");
+            setDeleting(false);
+          });
+      },
+      () => {}
+    );
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    getVehicle(vehicleId).then((resp) => {
+      setInitialValues(resp.data);
+      console.log(resp.data);
+
+      setImageSrc(
+        `${process.env.REACT_APP_API_URL}files/display/${resp.data.image[0]}`
+      );
+
+      setLoading(false);
+    });
+  }, []);
+
   return (
     <Form noValidate onSubmit={formik.handleSubmit}>
       <Row>
         <Col lg={3} className="image-area">
           <Form.Control
-            type="file"
             ref={fileImageRef}
+            type="file"
             name="image"
             onChange={handleImageChange}
             className="d-none"
@@ -261,13 +307,34 @@ const VehicleNew = () => {
       </Row>
       <div className="text-end">
         <ButtonGroup aria-label="Basic example">
-          <Button variant="primary" type="submit" disabled={loading}>
-            {loading && (
-              <Spinner animation="border" variant="light" size="sm" />
-            )}{" "}
-            Create
-          </Button>
-          <Button variant="secondary" type="button" variant="secondary" as={Link} to="/admin/vehicles">
+          {!initialValues.builtIn && (
+            <>
+              <Button variant="primary" type="submit" disabled={loading}>
+                {loading && (
+                  <Spinner animation="border" variant="light" size="sm" />
+                )}{" "}
+                Save
+              </Button>
+              <Button
+                type="button"
+                variant="danger"
+                disabled={deleting}
+                onClick={handleDelete}
+              >
+                {deleting && (
+                  <Spinner animation="border" variant="light" size="sm" />
+                )}{" "}
+                Delete
+              </Button>
+            </>
+          )}
+
+          <Button
+            variant="secondary"
+            type="button"
+            as={Link}
+            to="/admin/vehicles"
+          >
             Cancel
           </Button>
         </ButtonGroup>
@@ -276,4 +343,4 @@ const VehicleNew = () => {
   );
 };
 
-export default VehicleNew;
+export default VehicleEdit;

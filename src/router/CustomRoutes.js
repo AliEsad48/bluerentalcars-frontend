@@ -1,9 +1,12 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import AboutPage from "../pages/AboutPage";
+import ReservationEditPage from "../pages/admin/ReservationEditPage";
+import ReservationsPage from "../pages/admin/ReservationsPage";
 import UserEditPage from "../pages/admin/UserEditPage";
 import UsersNewPage from "../pages/admin/UsersNewPage";
 import UsersPage from "../pages/admin/UsersPage";
+import VehiclesEditPage from "../pages/admin/VehiclesEditPage";
 import VehiclesNewPage from "../pages/admin/VehiclesNewPage";
 import VehiclesPage from "../pages/admin/VehiclesPage";
 import ContactPage from "../pages/ContactPage";
@@ -27,6 +30,10 @@ const CustomRoutes = () => {
 
       <Route path="/admin/vehicles" element={<PrivateRoute admin={true}><VehiclesPage/></PrivateRoute>}/>
       <Route path="/admin/vehicles/new" element={<PrivateRoute admin={true}><VehiclesNewPage/></PrivateRoute>}/>
+      <Route path="/admin/vehicles/:vehicleId" element={<PrivateRoute admin={true}><VehiclesEditPage/></PrivateRoute>}/>
+
+      <Route path="/admin/reservations" element={<PrivateRoute admin={true}><ReservationsPage/></PrivateRoute>}/>
+      <Route path="/admin/reservations/:reservationId" element={<PrivateRoute admin={true}><ReservationEditPage/></PrivateRoute>}/>
 
       {/* CUSTOMER ROUTES */}
       <Route path="/reservations/:reservationId" element={<PrivateRoute><UserReservationDetailPage/></PrivateRoute>}/>
